@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		359E206928E8971100984029 /* SchoolsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206828E8971100984029 /* SchoolsListViewController.swift */; };
+		359E206D28E8BD5400984029 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206C28E8BD5400984029 /* Network.swift */; };
+		359E207228E8BDA300984029 /* Schools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206E28E8BDA300984029 /* Schools.swift */; };
+		359E207328E8BDA300984029 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206F28E8BDA300984029 /* CoreDataManager.swift */; };
+		359E207428E8BDA300984029 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E207028E8BDA300984029 /* Model.xcdatamodeld */; };
+		359E207628E8BE4E00984029 /* DecodableDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207528E8BE4E00984029 /* DecodableDefaults.swift */; };
 		35D7BCDC28E733FA001F4A8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D7BCDB28E733FA001F4A8E /* AppDelegate.swift */; };
 		35D7BCDE28E733FA001F4A8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D7BCDD28E733FA001F4A8E /* SceneDelegate.swift */; };
 		35D7BCE028E733FA001F4A8E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D7BCDF28E733FA001F4A8E /* ViewController.swift */; };
@@ -36,6 +42,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		359E205428E75F1D00984029 /* Services.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Services.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		359E206828E8971100984029 /* SchoolsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolsListViewController.swift; sourceTree = "<group>"; };
+		359E206C28E8BD5400984029 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		359E206E28E8BDA300984029 /* Schools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schools.swift; sourceTree = "<group>"; };
+		359E206F28E8BDA300984029 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		359E207128E8BDA300984029 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		359E207528E8BE4E00984029 /* DecodableDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodableDefaults.swift; sourceTree = "<group>"; };
 		35D7BCD828E733FA001F4A8E /* NYCSchools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYCSchools.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35D7BCDB28E733FA001F4A8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		35D7BCDD28E733FA001F4A8E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -49,6 +62,7 @@
 		35D7BCF828E733FC001F4A8E /* NYCSchoolsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NYCSchoolsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		35D7BCFC28E733FC001F4A8E /* NYCSchoolsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYCSchoolsUITests.swift; sourceTree = "<group>"; };
 		35D7BCFE28E733FC001F4A8E /* NYCSchoolsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NYCSchoolsUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		35D7BD5628E7416A001F4A8E /* Utilities.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +90,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		359E206A28E8BD1C00984029 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				359E207528E8BE4E00984029 /* DecodableDefaults.swift */,
+				359E206F28E8BDA300984029 /* CoreDataManager.swift */,
+				359E207028E8BDA300984029 /* Model.xcdatamodeld */,
+				359E206E28E8BDA300984029 /* Schools.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		359E206B28E8BD2500984029 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				359E206C28E8BD5400984029 /* Network.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
 		35D7BCCF28E733FA001F4A8E = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +116,7 @@
 				35D7BCF128E733FC001F4A8E /* NYCSchoolsTests */,
 				35D7BCFB28E733FC001F4A8E /* NYCSchoolsUITests */,
 				35D7BCD928E733FA001F4A8E /* Products */,
+				35D7BD5528E7416A001F4A8E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -99,6 +133,8 @@
 		35D7BCDA28E733FA001F4A8E /* NYCSchools */ = {
 			isa = PBXGroup;
 			children = (
+				359E206B28E8BD2500984029 /* Utilities */,
+				359E206A28E8BD1C00984029 /* Services */,
 				35D7BCDB28E733FA001F4A8E /* AppDelegate.swift */,
 				35D7BCDD28E733FA001F4A8E /* SceneDelegate.swift */,
 				35D7BCDF28E733FA001F4A8E /* ViewController.swift */,
@@ -106,6 +142,7 @@
 				35D7BCE428E733FC001F4A8E /* Assets.xcassets */,
 				35D7BCE628E733FC001F4A8E /* LaunchScreen.storyboard */,
 				35D7BCE928E733FC001F4A8E /* Info.plist */,
+				359E206828E8971100984029 /* SchoolsListViewController.swift */,
 			);
 			path = NYCSchools;
 			sourceTree = "<group>";
@@ -125,6 +162,15 @@
 				35D7BCFE28E733FC001F4A8E /* NYCSchoolsUITestsLaunchTests.swift */,
 			);
 			path = NYCSchoolsUITests;
+			sourceTree = "<group>";
+		};
+		35D7BD5528E7416A001F4A8E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				359E205428E75F1D00984029 /* Services.framework */,
+				35D7BD5628E7416A001F4A8E /* Utilities.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -258,8 +304,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				359E206D28E8BD5400984029 /* Network.swift in Sources */,
+				359E207228E8BDA300984029 /* Schools.swift in Sources */,
+				359E206928E8971100984029 /* SchoolsListViewController.swift in Sources */,
+				359E207628E8BE4E00984029 /* DecodableDefaults.swift in Sources */,
+				359E207428E8BDA300984029 /* Model.xcdatamodeld in Sources */,
 				35D7BCE028E733FA001F4A8E /* ViewController.swift in Sources */,
 				35D7BCDC28E733FA001F4A8E /* AppDelegate.swift in Sources */,
+				359E207328E8BDA300984029 /* CoreDataManager.swift in Sources */,
 				35D7BCDE28E733FA001F4A8E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +418,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -420,7 +472,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -602,6 +654,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		359E207028E8BDA300984029 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				359E207128E8BDA300984029 /* Model.xcdatamodel */,
+			);
+			currentVersion = 359E207128E8BDA300984029 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 35D7BCD028E733FA001F4A8E /* Project object */;
 }
