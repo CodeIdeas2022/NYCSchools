@@ -10,9 +10,7 @@ import Combine
 
 public class Network {
     public static let `default` = Network()
-    fileprivate let session: URLSession
-    
-    fileprivate let sessionDelegate = SessionDelegate()
+    fileprivate let session: URLSession    
     // Singleton
     private  init() {
         let config = URLSessionConfiguration.default
@@ -50,21 +48,5 @@ fileprivate extension Network {
     struct Constants {
         static let networkTimeout = 300.0
         static let httpSuccessRange = (200..<300)
-    }
-}
-
-
-class SessionDelegate: NSObject, URLSessionTaskDelegate, URLSessionDataDelegate {
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, willCacheResponse proposedResponse: CachedURLResponse) async -> CachedURLResponse? {
-        print("cached  delegate called")
-        return proposedResponse
-    }
-    
-    func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse) async -> URLSession.ResponseDisposition {
-        return .allow
-    }
-    
-    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        
     }
 }

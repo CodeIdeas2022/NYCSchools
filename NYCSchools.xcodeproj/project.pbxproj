@@ -13,6 +13,11 @@
 		359E207328E8BDA300984029 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206F28E8BDA300984029 /* CoreDataManager.swift */; };
 		359E207428E8BDA300984029 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E207028E8BDA300984029 /* Model.xcdatamodeld */; };
 		359E207628E8BE4E00984029 /* DecodableDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207528E8BE4E00984029 /* DecodableDefaults.swift */; };
+		359E207928E8C4C200984029 /* StringListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207828E8C4C200984029 /* StringListViewController.swift */; };
+		359E207B28E8F8F600984029 /* SchoolListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207A28E8F8F600984029 /* SchoolListHeaderView.swift */; };
+		359E207D28E8F92500984029 /* MySchoolTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207C28E8F92500984029 /* MySchoolTableCell.swift */; };
+		359E207F28E8FCDC00984029 /* SchoolDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207E28E8FCDC00984029 /* SchoolDetailsViewController.swift */; };
+		359E208228E9022700984029 /* DispatchQueueExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E208128E9022700984029 /* DispatchQueueExtension.swift */; };
 		35D7BCDC28E733FA001F4A8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D7BCDB28E733FA001F4A8E /* AppDelegate.swift */; };
 		35D7BCDE28E733FA001F4A8E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D7BCDD28E733FA001F4A8E /* SceneDelegate.swift */; };
 		35D7BCE028E733FA001F4A8E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35D7BCDF28E733FA001F4A8E /* ViewController.swift */; };
@@ -49,6 +54,11 @@
 		359E206F28E8BDA300984029 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		359E207128E8BDA300984029 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		359E207528E8BE4E00984029 /* DecodableDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodableDefaults.swift; sourceTree = "<group>"; };
+		359E207828E8C4C200984029 /* StringListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringListViewController.swift; sourceTree = "<group>"; };
+		359E207A28E8F8F600984029 /* SchoolListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListHeaderView.swift; sourceTree = "<group>"; };
+		359E207C28E8F92500984029 /* MySchoolTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MySchoolTableCell.swift; sourceTree = "<group>"; };
+		359E207E28E8FCDC00984029 /* SchoolDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolDetailsViewController.swift; sourceTree = "<group>"; };
+		359E208128E9022700984029 /* DispatchQueueExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatchQueueExtension.swift; sourceTree = "<group>"; };
 		35D7BCD828E733FA001F4A8E /* NYCSchools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NYCSchools.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		35D7BCDB28E733FA001F4A8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		35D7BCDD28E733FA001F4A8E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +119,27 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
+		359E207728E8BEBA00984029 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				359E206828E8971100984029 /* SchoolsListViewController.swift */,
+				35D7BCDF28E733FA001F4A8E /* ViewController.swift */,
+				359E207828E8C4C200984029 /* StringListViewController.swift */,
+				359E207A28E8F8F600984029 /* SchoolListHeaderView.swift */,
+				359E207C28E8F92500984029 /* MySchoolTableCell.swift */,
+				359E207E28E8FCDC00984029 /* SchoolDetailsViewController.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		359E208028E9021200984029 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				359E208128E9022700984029 /* DispatchQueueExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		35D7BCCF28E733FA001F4A8E = {
 			isa = PBXGroup;
 			children = (
@@ -133,16 +164,16 @@
 		35D7BCDA28E733FA001F4A8E /* NYCSchools */ = {
 			isa = PBXGroup;
 			children = (
+				359E208028E9021200984029 /* Extensions */,
+				359E207728E8BEBA00984029 /* UI */,
 				359E206B28E8BD2500984029 /* Utilities */,
 				359E206A28E8BD1C00984029 /* Services */,
 				35D7BCDB28E733FA001F4A8E /* AppDelegate.swift */,
 				35D7BCDD28E733FA001F4A8E /* SceneDelegate.swift */,
-				35D7BCDF28E733FA001F4A8E /* ViewController.swift */,
 				35D7BCE128E733FA001F4A8E /* Main.storyboard */,
 				35D7BCE428E733FC001F4A8E /* Assets.xcassets */,
 				35D7BCE628E733FC001F4A8E /* LaunchScreen.storyboard */,
 				35D7BCE928E733FC001F4A8E /* Info.plist */,
-				359E206828E8971100984029 /* SchoolsListViewController.swift */,
 			);
 			path = NYCSchools;
 			sourceTree = "<group>";
@@ -307,9 +338,14 @@
 				359E206D28E8BD5400984029 /* Network.swift in Sources */,
 				359E207228E8BDA300984029 /* Schools.swift in Sources */,
 				359E206928E8971100984029 /* SchoolsListViewController.swift in Sources */,
+				359E207928E8C4C200984029 /* StringListViewController.swift in Sources */,
+				359E207F28E8FCDC00984029 /* SchoolDetailsViewController.swift in Sources */,
+				359E208228E9022700984029 /* DispatchQueueExtension.swift in Sources */,
 				359E207628E8BE4E00984029 /* DecodableDefaults.swift in Sources */,
+				359E207B28E8F8F600984029 /* SchoolListHeaderView.swift in Sources */,
 				359E207428E8BDA300984029 /* Model.xcdatamodeld in Sources */,
 				35D7BCE028E733FA001F4A8E /* ViewController.swift in Sources */,
+				359E207D28E8F92500984029 /* MySchoolTableCell.swift in Sources */,
 				35D7BCDC28E733FA001F4A8E /* AppDelegate.swift in Sources */,
 				359E207328E8BDA300984029 /* CoreDataManager.swift in Sources */,
 				35D7BCDE28E733FA001F4A8E /* SceneDelegate.swift in Sources */,

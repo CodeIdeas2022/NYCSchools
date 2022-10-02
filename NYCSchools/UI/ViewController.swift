@@ -21,19 +21,20 @@ class ViewController: UIViewController {
         guard !isDataLoaded else { return }
         labelStatus.text = "Fetching data about NYC Schools. Please wait..."
         var request: AnyCancellable?
-        request = Schools.shared.fetchAndStore()
-            .sink { [weak self] result in
-                switch result {
-                case .finished:
-                    self?.isDataLoaded = true
-                    self?.presentSchools()
-                case .failure(let e):
-                    self?.labelStatus.text = "Failed to fetch and store data.\n\(e.localizedDescription)"
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
+            request = Schools.shared.fetchAndStore()
+                .sink { [weak self] result in
+                    switch result {
+                    case .finished:
+                        self?.isDataLoaded = true
+                        self?.presentSchools()
+                    case .failure(let e):
+                        self?.labelStatus.text = "Failed to fetch and store data.\n\(e.localizedDescription)"
+                    }
+                    request = nil
+                } receiveValue: { _ in
                 }
-                request = nil
-            } receiveValue: { _ in
-            }
-
+        }
     }
     
     func presentSchools() {

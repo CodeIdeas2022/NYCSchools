@@ -121,8 +121,8 @@ extension School {
         schoolEntity.phone = phone
         schoolEntity.email = email
         schoolEntity.website = website
-        schoolEntity.totalStudents = totalStudents
-        schoolEntity.graduationRate = graduationRate
+        schoolEntity.totalStudents = Int32(totalStudents) ?? -1
+        schoolEntity.graduationRate = Float(graduationRate) ?? -1.0
         schoolEntity.latitude = latitude
         schoolEntity.longitude = longitude
         return schoolEntity

@@ -54,10 +54,10 @@ public class Schools {
     
     public func fetchAndStore() -> PassthroughSubject<Void, Error> {
         let subject = PassthroughSubject<Void, Error>()
-        let url = URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json?$limit=5000")!
-        let request: AnyPublisher<[School],Error> = Network.default.fetch(url)
+//        let url = URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json?$limit=5000")!
+//        let request: AnyPublisher<[School],Error> = Network.default.fetch(url)
         var cancellables: [AnyCancellable] = []
-        
+
         func complete(_ error: Error? = nil) {
             if let e = error {
                 subject.send(completion: .failure(e))
@@ -90,7 +90,7 @@ public class Schools {
 //                }
 //            cancellables.append(insert)
 //        }
-//        cancellables.append(fetchTest)
+//       cancellables.append(fetchTest)
         CDManager.shared.load { error in
             complete(error)
         }
@@ -107,5 +107,76 @@ extension Schools {
     public func worsttGraduationRate() -> [SchoolInfo] {
         let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [NSSortDescriptor(key: "graduationRate", ascending: true)])
         return schoolsList
+    }
+    
+    public func mostNumberOfStudents() -> [SchoolInfo] {
+        let sortDescriptor = NSSortDescriptor(key: "totalStudents", ascending: false, selector: #selector(NSString.localizedStandardCompare(_:)))
+        let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [sortDescriptor])
+        return schoolsList
+    }
+    
+    public func leastNumberOfStudents() -> [SchoolInfo] {
+        let sortDescriptor = NSSortDescriptor(key: "totalStudents", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
+        let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [sortDescriptor])
+        return schoolsList
+    }
+}
+
+public struct SchoolDetails {
+    @DecodableDefault.EmptyString var dbn: String
+    @DecodableDefault.EmptyString var name: String
+    @DecodableDefault.EmptyString var satTakers: String
+    @DecodableDefault.EmptyString var satCriticalReadingAverage: String
+    @DecodableDefault.EmptyString var satMathAverage: String
+    @DecodableDefault.EmptyString var satWritingAverage: String
+}
+
+extension SchoolDetails: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case dbn = "dbn"
+        case name = "school_name"
+        case satTakers = "num_of_sat_test_takers"
+        case satCriticalReadingAverage = "sat_critical_reading_avg_score"
+        case satMathAverage = "sat_math_avg_score"
+        case satWritingAverage = "sat_writing_avg_score"
+    }
+}
+
+extension SchoolInfo {
+    func fetchDetails() -> PassthroughSubject<SchoolDetails?, Error> {
+        let subject = PassthroughSubject<SchoolDetails?, Error>()
+        var cancellables: [AnyCancellable] = []
+        
+        func complete(_ error: Error? = nil) {
+            if let e = error {
+                subject.send(completion: .failure(e))
+            } else {
+                subject.send(completion: .finished)
+            }
+            cancellables.removeAll()
+        }
+        
+        guard let dbn = self.dbn else {
+            subject.send(nil)
+            complete()
+            return subject
+        }
+        let url = URL(string: "https://data.cityofnewyork.us/resource/f9bf-2cp4.json?dbn=\(dbn)")!
+        let request: AnyPublisher<[SchoolDetails],Error> = Network.default.fetch(url)
+        
+        let fetchTest = request.sink { failure in
+            switch failure {
+            case .failure(let error):
+                print("Failed=\(failure)")
+                complete(error)
+            default: break
+            }
+        } receiveValue: { details in
+            print("\(details)")
+            subject.send(details.first)
+            complete()
+        }
+        cancellables.append(fetchTest)
+        return subject
     }
 }

@@ -6,14 +6,14 @@
         <attribute name="city" optional="YES" attributeType="String"/>
         <attribute name="dbn" optional="YES" attributeType="String"/>
         <attribute name="email" optional="YES" attributeType="String"/>
-        <attribute name="graduationRate" optional="YES" attributeType="String"/>
+        <attribute name="graduationRate" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String"/>
         <attribute name="longitude" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="neighborhood" optional="YES" attributeType="String"/>
         <attribute name="overview" optional="YES" attributeType="String"/>
         <attribute name="phone" optional="YES" attributeType="String"/>
-        <attribute name="totalStudents" optional="YES" attributeType="String"/>
+        <attribute name="totalStudents" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="website" optional="YES" attributeType="String"/>
         <attribute name="zip" optional="YES" attributeType="String"/>
     </entity>
