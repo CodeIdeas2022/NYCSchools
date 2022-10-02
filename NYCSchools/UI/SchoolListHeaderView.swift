@@ -8,35 +8,65 @@
 import UIKit
 
 class SchoolListHeaderView: UIView {
-    let button: UIButton
+    let sortButton: UIButton
+    let searchButton: UIButton
     let title: UILabel
+    let sortType: UILabel
     init() {
-        self.button = UIButton(type: .custom)
-        let label = UILabel()
-        self.title = label
+        self.sortButton = UIButton(type: .custom)
+        self.searchButton = UIButton(type: .custom)
+        self.title = UILabel()
+        self.sortType = UILabel()
         super.init(frame: CGRect(x: 0, y: 0, width: 100, height: 50))
         translatesAutoresizingMaskIntoConstraints = false
-        button.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(button)
+        addSubview(title)
+        addSubview(sortType)
+        addSubview(sortButton)
+        addSubview(searchButton)
 
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        label.lineBreakMode = .byWordWrapping
-        label.text = "NYC Schools"
-        label.textColor = .white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(label)
-        label.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
-        label.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        title.numberOfLines = 0
+        title.textAlignment = .center
+        title.lineBreakMode = .byWordWrapping
+        title.text = "NYC Schools"
+        title.textColor = .white
+        title.translatesAutoresizingMaskIntoConstraints = false
+        title.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
+        title.topAnchor.constraint(equalTo: sortButton.topAnchor).isActive = true
+        
+        sortType.textAlignment = .center
+        sortType.lineBreakMode = .byWordWrapping
+        sortType.textColor = .lightText
+        sortType.font = UIFont.systemFont(ofSize: 14)
+        sortType.translatesAutoresizingMaskIntoConstraints = false
+        sortType.centerXAnchor.constraint(equalTo: safeAreaLayoutGuide.centerXAnchor).isActive = true
+        sortType.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 0.0).isActive = true
+        
         
         let config = UIImage.SymbolConfiguration(textStyle: .largeTitle)
-        let image = UIImage(systemName: "arrow.up.arrow.down.square", withConfiguration: config)
-        button.tintColor = .lightGray
-        button.setImage(image, for: .normal)
-        button.imageView?.contentMode = .scaleAspectFill
-        button.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
-        button.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
-        button.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        let sortImage = UIImage(systemName: "arrow.up.arrow.down.square", withConfiguration: config)
+        sortButton.tintColor = .lightGray
+        sortButton.setImage(sortImage, for: .normal)
+        sortButton.imageView?.contentMode = .scaleAspectFill
+        if sortImage == nil {
+            sortButton.setBorderColor(.white)
+        }
+        sortButton.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
+        sortButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        sortButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        sortButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        let searchImage = UIImage(systemName: "magnifyingglass", withConfiguration: config)
+        searchButton.tintColor = .lightGray
+        searchButton.setImage(searchImage, for: .normal)
+        searchButton.imageView?.contentMode = .scaleAspectFill
+        if searchImage == nil {
+            searchButton.setBorderColor(.white)
+        }
+        searchButton.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
+        searchButton.centerYAnchor.constraint(equalTo: safeAreaLayoutGuide.centerYAnchor).isActive = true
+        searchButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        searchButton.translatesAutoresizingMaskIntoConstraints = false
+        
     }
     
     required init?(coder: NSCoder) {

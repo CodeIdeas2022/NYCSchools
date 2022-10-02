@@ -10,7 +10,18 @@ import Combine
 
 class SchoolsListViewController: UIViewController {
     var sort: Sort = .bestGraduationRate
-    
+    var searchResults: [School] = []
+    var isSearching = false
+    var constraintShowSearchBar: NSLayoutConstraint?
+    var constraintHideSearchBar: NSLayoutConstraint?
+    lazy var keyboardDismissView: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .clear
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(removeSearchKeyBoard))
+        v.addGestureRecognizer(gesture)
+        return v
+    }()
     lazy var tableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
@@ -23,8 +34,18 @@ class SchoolsListViewController: UIViewController {
     
     lazy var sortView: SchoolListHeaderView = {
         let headerView = SchoolListHeaderView()
-        headerView.button.addTarget(self, action: #selector(sortButtonTapped(_:)), for: .touchUpInside)
+        headerView.sortButton.addTarget(self, action: #selector(sortButtonTapped(_:)), for: .touchUpInside)
+        headerView.searchButton.addTarget(self, action: #selector(searchButtonTapped(_:)), for: .touchUpInside)
         return headerView
+    }()
+    
+    lazy var searchBar: UISearchBar = {
+       let s = UISearchBar()
+        s.placeholder = "All fields search"
+        s.translatesAutoresizingMaskIntoConstraints = false
+        s.showsCancelButton = true
+        s.returnKeyType = .default
+        return s
     }()
     
     required init?(coder: NSCoder) {
@@ -45,6 +66,7 @@ class SchoolsListViewController: UIViewController {
     func addSubViews() {
         view.addSubview(tableView)
         view.addSubview(sortView)
+        view.addSubview(searchBar)
     }
     
     func setupLayout() {
@@ -58,9 +80,21 @@ class SchoolsListViewController: UIViewController {
         tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        
+        constraintHideSearchBar = searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -100)
+        constraintShowSearchBar = searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0)
+
+        constraintHideSearchBar?.isActive = true
+        constraintShowSearchBar?.isActive = false
+        
+        searchBar.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        searchBar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        searchBar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        searchBar.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     func setupSources() {
+        searchBar.delegate = self
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(MySchoolCell.self, forCellReuseIdentifier: MySchoolCell.id)
@@ -78,31 +112,33 @@ class SchoolsListViewController: UIViewController {
         case .leastNumberOfStudents:
             schools = Schools.shared.leastNumberOfStudents()
         }
-        sortView.title.text = "NYC Schools - \(schools.count) students" + "\n\(sort.displayString)"
+        sortView.title.text = "NYC Schools - \(schools.count) schools"
+        sortView.sortType.text = sort.displayString
         if reload {
-            tableView.reloadData()
-            if schools.count > 0 {
-                tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
-            }
+            refreshData()
         }
+    }
+    
+    var currentSchools: [School] {
+        return isSearching ? searchResults : schools
     }
 }
 
 extension SchoolsListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MySchoolCell.id, for: indexPath) as! MySchoolCell
-        cell.fillData(schools[indexPath.row], highlightField: sort)
+        cell.fillData(currentSchools[indexPath.row], highlightField: sort)
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return schools.count
+        return currentSchools.count
     }
 }
 
 extension SchoolsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let school = schools[indexPath.row]
+        let school = currentSchools[indexPath.row]
         var cancellable: AnyCancellable?
         cancellable = school.fetchDetails()
             .sink { result in
@@ -123,6 +159,76 @@ extension SchoolsListViewController: UITableViewDelegate {
     }
 }
 
+extension SchoolsListViewController: UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        removeSearchKeyBoard()
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard !searchText.isEmpty else {
+            searchResults = schools
+            refreshData()
+            return
+        }
+        search(searchText)
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        endSearch()
+    }
+}
+
+extension SchoolsListViewController {
+    func endSearch() {
+        removeSearchKeyBoard()
+        isSearching = false
+        searchResults = []
+        searchBar.searchTextField.text = nil
+        constraintShowSearchBar?.isActive = false
+        constraintHideSearchBar?.isActive = true
+        refreshSort()
+    }
+    
+    func showSearch() {
+        isSearching = true
+        constraintHideSearchBar?.isActive = false
+        constraintShowSearchBar?.isActive = true
+        addSearchKeyBoardDismissView()
+        searchBar.becomeFirstResponder()
+    }
+    
+    func addSearchKeyBoardDismissView() {
+        view.addSubview(keyboardDismissView)
+        keyboardDismissView.topAnchor.constraint(equalTo: searchBar.bottomAnchor).isActive = true
+        keyboardDismissView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        keyboardDismissView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+        keyboardDismissView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+    }
+    
+    @objc func removeSearchKeyBoard() {
+        searchBar.resignFirstResponder()
+        keyboardDismissView.removeFromSuperview()
+    }
+    
+    func search(_ searchText: String) {
+        var cancellable: AnyCancellable?
+        cancellable = Schools.shared.searchSchools(schools, string: searchText)
+            .sink { _ in
+                cancellable = nil
+            } receiveValue: { schools in
+                DispatchQueue.executeInMain { [weak self] in
+                    self?.searchResults = schools
+                    self?.refreshData()
+                }
+            }
+    }
+    
+    func refreshData() {
+        tableView.reloadData()
+        if currentSchools.count > 0 {
+            tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+        }
+    }
+}
+
 extension SchoolsListViewController {
     @objc func sortButtonTapped(_ sender: Any) {
         let vc = StringListViewController(Sort.all.map({ $0.displayString }))
@@ -134,6 +240,14 @@ extension SchoolsListViewController {
             }
             return true
         }
+    }
+    
+    @objc func searchButtonTapped(_ sender: Any) {
+        showSearch()
+    }
+    
+    @objc func dismissSearch() {
+        
     }
 }
 

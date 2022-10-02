@@ -18,6 +18,17 @@ class SchoolDetailsViewController: UIViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+    lazy var titleContainerView: UIView = {
+       let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        v.backgroundColor = .black
+        v.addSubview(labelTitle)
+        labelTitle.topAnchor.constraint(equalTo: v.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        labelTitle.centerXAnchor.constraint(equalTo: v.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
+        labelTitle.widthAnchor.constraint(equalTo: v.safeAreaLayoutGuide.widthAnchor, constant: 0).isActive = true
+        labelTitle.bottomAnchor.constraint(equalTo: v.bottomAnchor).isActive = true
+        return v
+    }()
     lazy var labelDetails: UILabel = {
        let label = UILabel()
         label.numberOfLines = 0
@@ -45,7 +56,8 @@ class SchoolDetailsViewController: UIViewController {
     
     
     func addSubViews() {
-        view.addSubview(labelTitle)
+        view.backgroundColor = .lightGray.withAlphaComponent(0.5)
+        view.addSubview(titleContainerView)
         view.addSubview(labelDetails)
     }
     
@@ -55,14 +67,14 @@ class SchoolDetailsViewController: UIViewController {
     }
     
     func setupLayout() {
-        labelTitle.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-        labelTitle.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
-        labelTitle.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: 0).isActive = true
-        labelTitle.heightAnchor.constraint(greaterThanOrEqualToConstant: 40).isActive = true
+        titleContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        titleContainerView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        titleContainerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        titleContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40).isActive = true
         
         labelDetails.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
         labelDetails.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -20).isActive = true
-        labelDetails.topAnchor.constraint(equalTo: labelTitle.bottomAnchor, constant: 20).isActive = true
+        labelDetails.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 20).isActive = true
     }
     
     func presentAsPopover(_ parent: UIViewController, sourceView: UIView) {

@@ -20,7 +20,7 @@ class StringListViewController: UIViewController {
     
     override var preferredContentSize: CGSize {
         get {
-            return CGSize(width: UIView.noIntrinsicMetric , height: (CGFloat(items.count) * 44.0))
+            return CGSize(width: UIView.noIntrinsicMetric , height: (CGFloat(items.count) * Constants.tableViewCellHeight))
         }
         set {
             super.preferredContentSize = newValue
@@ -77,7 +77,12 @@ class StringListViewController: UIViewController {
         }
         parent.present(self, animated: true)
     }
+}
 
+extension StringListViewController {
+    struct Constants {
+        static let tableViewCellHeight = 50.0
+    }
 }
 
 extension StringListViewController : UIPopoverPresentationControllerDelegate {
@@ -105,5 +110,9 @@ extension StringListViewController: UITableViewDelegate {
         if itemSelectedHandler?(items[indexPath.row]) == true {
             dismiss(animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return Constants.tableViewCellHeight
     }
 }
