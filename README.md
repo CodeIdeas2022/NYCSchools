@@ -15,3 +15,6 @@ Technologies used
 - Swift Combine. This is my first attempt at using Combine. Familiar with RxSwift.
 - UIKit
 - iOS Network API's to fetch data school directory and details
+
+Additional possibilities:
+- Instead of a list, teh schools can be put on a map since the directory has school location data(latitude and longitude)
