@@ -111,6 +111,18 @@ class SchoolsListViewController: UIViewController {
             schools = Schools.shared.mostNumberOfStudents()
         case .leastNumberOfStudents:
             schools = Schools.shared.leastNumberOfStudents()
+        case .topSATReading:
+            schools = Schools.shared.satReadingRank()
+        case .topSATWriting:
+            schools = Schools.shared.satWritingRank()
+        case .topSATMath:
+            schools = Schools.shared.satMathRank()
+        case .bottomSATReading:
+            schools = Schools.shared.satReadingRank(false)
+        case .bottomSATWriting:
+            schools = Schools.shared.satWritingRank(false)
+        case .bottomSATMath:
+            schools = Schools.shared.satMathRank(false)
         }
         sortView.title.text = "NYC Schools - \(schools.count) schools"
         sortView.sortType.text = sort.displayString
@@ -245,6 +257,12 @@ extension SchoolsListViewController {
         case worstGraduationRate
         case mostNumberOfStudents
         case leastNumberOfStudents
+        case topSATReading
+        case topSATWriting
+        case topSATMath
+        case bottomSATReading
+        case bottomSATWriting
+        case bottomSATMath
         
         var displayString: String {
             switch self {
@@ -256,9 +274,21 @@ extension SchoolsListViewController {
                 return "Most Number Of Students"
             case .leastNumberOfStudents:
                 return "Least Number Of Students"
+            case .topSATMath:
+                return "Top SAT Math Rank"
+            case .topSATReading:
+                return "Top SAT Reading Rank"
+            case .topSATWriting:
+                return "Top SAT Writing Rank"
+            case .bottomSATMath:
+                return "Bottom SAT Math Rank"
+            case .bottomSATReading:
+                return "Bottom SAT Reading Rank"
+            case .bottomSATWriting:
+                return "Bottom SAT Writing Rank"
             }
         }
-        static let all: [Sort] = [.bestGraduationRate, .worstGraduationRate, .mostNumberOfStudents, .leastNumberOfStudents]
+        static let all: [Sort] = [.bestGraduationRate, .worstGraduationRate, .mostNumberOfStudents, .leastNumberOfStudents, .topSATReading, .topSATMath, .topSATWriting, bottomSATReading, .bottomSATMath, .bottomSATWriting]
         
         static func withDisplayString(_ string: String) -> Sort? {
             for value in all {

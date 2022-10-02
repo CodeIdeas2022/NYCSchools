@@ -23,6 +23,11 @@ public struct School {
     @DecodableDefault.EmptyString var graduationRate: String
     @DecodableDefault.EmptyString var latitude: String
     @DecodableDefault.EmptyString var longitude: String
+    var details: SchoolDetails?
+    
+    mutating func setSchoolDetails(_ detail: SchoolDetails?) {
+        details = detail
+    }
 }
 
 extension School: Decodable {

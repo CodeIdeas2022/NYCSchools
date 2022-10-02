@@ -14,6 +14,11 @@ public struct SchoolDetails {
     @DecodableDefault.EmptyString var satCriticalReadingAverage: String
     @DecodableDefault.EmptyString var satMathAverage: String
     @DecodableDefault.EmptyString var satWritingAverage: String
+    var satRanking: Schools.SATRankings?
+    
+    mutating func setRanking(_ ranking: Schools.SATRankings) {
+        satRanking = ranking
+    }
 }
 
 extension SchoolDetails: Decodable {

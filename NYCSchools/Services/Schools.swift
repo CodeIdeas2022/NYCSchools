@@ -50,13 +50,32 @@ public class Schools {
                             complete()
                         }
                     }, receiveValue: { [weak self] details in
-                        self?.schoolsDetail = details
+                        guard let self = self else { return }
+                        self.schoolsDetail = details.sorted(by: { school1, school2 in
+                            return school1.dbn > school2.dbn
+                        })
+                        let count = self.schools.count
+                        for index in 0..<count {
+                            var school = self.schools[index]
+                            guard  let detailIndex = self.indexOfDetailsForSchool(school) else {
+                                continue
+                            }
+                            var details = self.schoolsDetail[detailIndex]
+                            let ranking = self.satRankingForSchool(details)
+                            details.setRanking(ranking)
+                            self.schoolsDetail[detailIndex] = details
+                            
+                            school.setSchoolDetails(details)
+                            self.schools[index] = school
+                        }
                         subject.send(())
                     })
                     
             }
         } receiveValue: { [weak self] schools in
-            self?.schools = schools
+            self?.schools = schools.sorted(by: { school1, school2 in
+                return school1.dbn > school2.dbn
+            })
             subject.send(())
         }
         return subject
@@ -92,8 +111,26 @@ public class Schools {
         return subject
     }
     
-    public func detailsForSchool(_ school: School) -> SchoolDetails? {
-        return schoolsDetail.filter({ $0.dbn == school.dbn }).first
+    public func indexOfDetailsForSchool(_ school: School) -> Int? {
+        let schoolsDetails = self.schoolsDetail
+        return schoolsDetail.indices.filter({ schoolsDetails[$0].dbn == school.dbn }).first
+    }
+    
+    public func satRankingForSchool(_ details: SchoolDetails) -> SATRankings {
+        let reading = schoolsDetail.sorted { detail1, detail2 in
+            return detail1.satCriticalReadingAverage > detail2.satCriticalReadingAverage
+        }
+        let writing = schoolsDetail.sorted { detail1, detail2 in
+            return detail1.satWritingAverage > detail2.satWritingAverage
+        }
+        let math = schoolsDetail.sorted { detail1, detail2 in
+            return detail1.satMathAverage > detail2.satMathAverage
+        }
+        
+        let readingRank = reading.firstIndex(where: {$0.dbn == details.dbn }) ?? -1
+        let writingRank = writing.firstIndex(where: {$0.dbn == details.dbn }) ?? -1
+        let mathRank = math.firstIndex(where: {$0.dbn == details.dbn }) ?? -1
+        return SATRankings(reading: readingRank, writing: writingRank, math: mathRank, totalSchoolsWithReadingScores: reading.count, totalSchoolsWithWritingScores: writing.count, totalSchoolsWithMathScores: math.count)
     }
 }
 
@@ -139,6 +176,39 @@ extension Schools {
                 return false
             }
             return num1 < num2
+        })
+    }
+    
+    public func satReadingRank(_ isBest: Bool = true) -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard let ranking1 = school1.details?.satRanking?.reading else { return false }
+            guard let ranking2 = school2.details?.satRanking?.reading else { return true }
+            guard ranking1 >= 0 else { return false }
+            guard ranking2 >= 0 else { return true }
+
+            return  (ranking1 < ranking2) == isBest
+        })
+    }
+    
+    public func satWritingRank(_ isBest: Bool = true) -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard let ranking1 = school1.details?.satRanking?.writing else { return false }
+            guard let ranking2 = school2.details?.satRanking?.writing else { return true }
+            guard ranking1 >= 0 else { return false }
+            guard ranking2 >= 0 else { return true }
+
+            return  (ranking1 < ranking2) == isBest
+        })
+    }
+    
+    public func satMathRank(_ isBest: Bool = true) -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard let ranking1 = school1.details?.satRanking?.math else { return false }
+            guard let ranking2 = school2.details?.satRanking?.math else { return true }
+            guard ranking1 >= 0 else { return false }
+            guard ranking2 >= 0 else { return true }
+
+            return  (ranking1 < ranking2) == isBest
         })
     }
     
@@ -212,5 +282,17 @@ extension School {
             complete()
         }
         return subject
+    }
+}
+
+
+public extension Schools {
+    public struct SATRankings {
+        let reading: Int
+        let writing: Int
+        let math: Int
+        let totalSchoolsWithReadingScores: Int
+        let totalSchoolsWithWritingScores: Int
+        let totalSchoolsWithMathScores: Int
     }
 }

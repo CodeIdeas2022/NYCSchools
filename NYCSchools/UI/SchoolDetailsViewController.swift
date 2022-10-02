@@ -24,18 +24,37 @@ class SchoolDetailsViewController: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = .black
         v.addSubview(labelTitle)
+        v.addSubview(closeButton)
+
+        closeButton.rightAnchor.constraint(equalTo: v.safeAreaLayoutGuide.rightAnchor, constant: -5).isActive = true
+        closeButton.centerYAnchor.constraint(equalTo: v.safeAreaLayoutGuide.centerYAnchor).isActive = true
+        
         labelTitle.topAnchor.constraint(equalTo: v.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        labelTitle.centerXAnchor.constraint(equalTo: v.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
-        labelTitle.widthAnchor.constraint(equalTo: v.safeAreaLayoutGuide.widthAnchor, constant: 0).isActive = true
+        labelTitle.centerXAnchor.constraint(equalTo: v.safeAreaLayoutGuide.centerXAnchor).isActive = true
+        labelTitle.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -5).isActive = true
         labelTitle.bottomAnchor.constraint(equalTo: v.bottomAnchor).isActive = true
         return v
     }()
-    lazy var labelDetails: UILabel = {
-       let label = UILabel()
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
+    lazy var labelDetails: UITextView = {
+        let label = UITextView()
+        label.isEditable = false
+        label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.dataDetectorTypes = [.phoneNumber, .address, .link]
         return label
+    }()
+    
+    lazy var closeButton: UIButton = {
+       let b = UIButton()
+        b.translatesAutoresizingMaskIntoConstraints = false
+        let config = UIImage.SymbolConfiguration(textStyle: .largeTitle)
+        let closeImage = UIImage(systemName: "xmark.circle", withConfiguration: config)
+        b.setImage(closeImage, for: .normal)
+        b.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
+        b.tintColor = .white
+        b.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return b
+        
     }()
        
     required init?(coder: NSCoder) {
@@ -64,26 +83,17 @@ class SchoolDetailsViewController: UIViewController {
     
     func setupData() {
         labelTitle.text = "\(school.name)"
-        labelDetails.text = "Fetching details for school. Please wait.."
-        var cancellable: AnyCancellable?
-        cancellable = school.fetchDetails()
-            .sink { [weak self] result in
-                switch result {
-                case .failure(let error):
-                    self?.displayNoData(error)
-                default: break
-                }
-                cancellable = nil
-            } receiveValue: { [weak self] schoolDetails in
-                guard let self = self else { return }
-                guard let schoolDetails = schoolDetails else {
-                    self.displayNoData(nil)
-                    return
-                }
-                DispatchQueue.executeInMain {
-                    self.labelDetails.text = schoolDetails.satTakers + " students took the SAT." + "\n\nThe average score for critical reading is " + schoolDetails.satCriticalReadingAverage + ".\n\nThe average score for math is " + schoolDetails.satMathAverage + ".\n\nThe average score for critical writing is " + schoolDetails.satWritingAverage + "."
-                }
-            }
+        if let schoolDetails = school.details {
+            let ranking = Schools.shared.satRankingForSchool(schoolDetails)
+            var detailInfo = schoolDetails.satTakers + " students took the SAT." + "\n\nThe average score for critical reading is " + schoolDetails.satCriticalReadingAverage + ".\n\nThe average score for math is " + schoolDetails.satMathAverage + ".\n\nThe average score for critical writing is " + schoolDetails.satWritingAverage + "."
+            detailInfo = detailInfo + "\n\nCritical reading rank is \(ranking.reading)/\(ranking.totalSchoolsWithReadingScores)."
+            detailInfo = detailInfo + "\n\nCritical math rank is \(ranking.math)/\(ranking.totalSchoolsWithMathScores)."
+            detailInfo = detailInfo + "\n\nCritical writing rank is \(ranking.writing)/\(ranking.totalSchoolsWithWritingScores)."
+            detailInfo = detailInfo + "\n\nOverview: \(school.overview)"
+            labelDetails.text = detailInfo
+        } else {
+            displayNoData(nil)
+        }
     }
     
     func displayNoData(_ error: Error?) {
@@ -95,13 +105,14 @@ class SchoolDetailsViewController: UIViewController {
     
     func setupLayout() {
         titleContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        titleContainerView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor).isActive = true
-        titleContainerView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor).isActive = true
+        titleContainerView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+        titleContainerView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
         titleContainerView.heightAnchor.constraint(greaterThanOrEqualToConstant: 40).isActive = true
         
         labelDetails.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor, constant: 0).isActive = true
         labelDetails.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: -20).isActive = true
-        labelDetails.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 20).isActive = true
+        labelDetails.topAnchor.constraint(equalTo: titleContainerView.bottomAnchor, constant: 10).isActive = true
+        labelDetails.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
     }
     
     func presentAsPopover(_ parent: UIViewController, sourceView: UIView) {
@@ -115,6 +126,10 @@ class SchoolDetailsViewController: UIViewController {
             popover.permittedArrowDirections = [.up]
         }
         parent.present(self, animated: true)
+    }
+    
+    @objc func closeScreen() {
+        self.dismiss(animated: true)
     }
 }
 
