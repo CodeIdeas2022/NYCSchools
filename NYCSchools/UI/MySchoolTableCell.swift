@@ -20,24 +20,24 @@ class MySchoolCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func fillData(_ school: SchoolInfo, highlightField: SchoolsListViewController.Sort) {
+    func fillData(_ school: School, highlightField: SchoolsListViewController.Sort) {
         textLabel?.text = school.name
-        var detail: [String] = [school.dbn ?? ""]
+        var detail: [String] = [school.dbn]
         switch highlightField {
         case .bestGraduationRate, .worstGraduationRate:
-            if school.graduationRate != -1.0 {
-                detail.append(String(format: "%.1f", school.graduationRate * 100.0) + "%")
+            if school.graduationRate.isEmpty == false, let rate = Float(school.graduationRate) {
+                detail.append(String(format: "%.1f", rate * 100.0) + "%")
             } else {
                 detail.append("Graduation rate NA")
             }
         case .mostNumberOfStudents, .leastNumberOfStudents:
-            if school.totalStudents != -1 {
+            if school.totalStudents.isEmpty == false {
                 detail.append("\(school.totalStudents) students")
             } else {
                 detail.append("Student count rate NA")
             }
         }
-        detail.append(school.borough ?? "NA")
+        detail.append(school.borough)
         detailTextLabel?.text = detail.joined(separator: ", ")
     }
 }

@@ -22,7 +22,7 @@ class ViewController: UIViewController {
         labelStatus.text = "Fetching data about NYC Schools. Please wait..."
         var request: AnyCancellable?
         Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
-            request = Schools.shared.fetchAndStore()
+            request = Schools.shared.fetch()
                 .sink { [weak self] result in
                     switch result {
                     case .finished:
@@ -38,9 +38,14 @@ class ViewController: UIViewController {
     }
     
     func presentSchools() {
-        let vc = SchoolsListViewController()
-        vc.modalPresentationStyle = .fullScreen
-        present(vc, animated: true)
+        func display() {
+            let vc = SchoolsListViewController()
+            vc.modalPresentationStyle = .fullScreen
+            present(vc, animated: true)
+        }
+        DispatchQueue.executeInMain {
+            display()
+        }
     }
 }
 

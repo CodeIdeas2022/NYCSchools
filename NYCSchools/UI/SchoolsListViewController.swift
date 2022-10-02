@@ -19,7 +19,7 @@ class SchoolsListViewController: UIViewController {
         return table
     }()
     
-    var schools: [SchoolInfo] = []
+    var schools: [School] = []
     
     lazy var sortView: SchoolListHeaderView = {
         let headerView = SchoolListHeaderView()
@@ -64,38 +64,21 @@ class SchoolsListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(MySchoolCell.self, forCellReuseIdentifier: MySchoolCell.id)
-        schools = Schools.shared.bestGraduationRate()
         refreshSort()
     }
     
     func refreshSort(_ reload: Bool = true) {
-        sortView.title.text = "NYC Schools - \(schools.count)" + "\n\(sort.displayString)"
         switch sort {
         case .bestGraduationRate:
-            schools = schools.sorted(by: { school1, school2 in
-                guard school1.graduationRate != -1.0 else { return false }
-                guard school2.graduationRate != -1.0 else { return true }
-                return school1.graduationRate > school2.graduationRate
-            })
+            schools = Schools.shared.bestGraduationRate()
         case .worstGraduationRate:
-            schools = schools.sorted(by: { school1, school2 in
-                guard school1.graduationRate != -1 else { return false }
-                guard school2.graduationRate != -1.0 else { return true }
-                return school1.graduationRate < school2.graduationRate
-            })
+            schools = Schools.shared.worsttGraduationRate()
         case .mostNumberOfStudents:
-            schools = schools.sorted(by: { school1, school2 in
-                guard school1.totalStudents != -1 else { return false }
-                guard school2.totalStudents != -1 else { return true }
-                return school1.totalStudents > school2.totalStudents
-            })
+            schools = Schools.shared.mostNumberOfStudents()
         case .leastNumberOfStudents:
-            schools = schools.sorted(by: { school1, school2 in
-                guard school1.totalStudents != -1 else { return false }
-                guard school2.totalStudents != -1 else { return true }
-                return school1.totalStudents < school2.totalStudents
-            })
+            schools = Schools.shared.leastNumberOfStudents()
         }
+        sortView.title.text = "NYC Schools - \(schools.count) students" + "\n\(sort.displayString)"
         if reload {
             tableView.reloadData()
             if schools.count > 0 {
@@ -133,8 +116,6 @@ extension SchoolsListViewController: UITableViewDelegate {
                     guard let self = self else { return }
                     self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
                     let vc = SchoolDetailsViewController(schoolDetails: details)
-//                    vc.modalPresentationStyle = .fullScreen
-                    // self.present(vc, animated: true)
                     guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
                     vc.presentAsPopover(self, sourceView: cell)
                 }
@@ -166,9 +147,9 @@ extension SchoolsListViewController {
         var displayString: String {
             switch self {
             case .bestGraduationRate:
-                return "Best Graduate Rate"
+                return "Top Graduation Rate"
             case .worstGraduationRate:
-                return "Worst Graduate Rate"
+                return "Bottom Graduation Rate"
             case .mostNumberOfStudents:
                 return "Most Number Of Students"
             case .leastNumberOfStudents:

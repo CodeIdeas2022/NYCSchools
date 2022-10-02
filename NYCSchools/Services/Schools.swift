@@ -47,16 +47,16 @@ extension School: Decodable {
 
 public class Schools {
     public static let shared = Schools()
-    
+    public private(set) var schools: [School] = []
     private init() {
         
     }
     
-    public func fetchAndStore() -> PassthroughSubject<Void, Error> {
+    public func fetch() -> PassthroughSubject<Void, Error> {
         let subject = PassthroughSubject<Void, Error>()
-//        let url = URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json?$limit=5000")!
-//        let request: AnyPublisher<[School],Error> = Network.default.fetch(url)
-        var cancellables: [AnyCancellable] = []
+        let url = URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json")!
+        let request: AnyPublisher<[School],Error> = Network.default.fetch(url)
+        var cancellable: AnyCancellable?
 
         func complete(_ error: Error? = nil) {
             if let e = error {
@@ -64,61 +64,69 @@ public class Schools {
             } else {
                 subject.send(completion: .finished)
             }
-            cancellables.removeAll()
+            cancellable = nil
         }
-//
-//        let fetchTest = request.sink { failure in
-//            switch failure {
-//            case .failure(let error):
-//                print("Failed=\(failure)")
-//                complete(error)
-//            default: break
-//            }
-//        } receiveValue: { schools in
-//            print("\(schools)")
-//            let insert = CDManager.shared.insert(schools: schools)
-//                .sink { result in
-//                    switch result {
-//                    case .failure(let error):
-//                        print("Failed=\(error)")
-//                        complete(error)
-//                    default:
-//                        complete()
-//                    }
-//                } receiveValue: { _ in
-//
-//                }
-//            cancellables.append(insert)
-//        }
-//       cancellables.append(fetchTest)
-        CDManager.shared.load { error in
-            complete(error)
+
+        cancellable = request.sink { failure in
+            switch failure {
+            case .failure(let error):
+                print("Failed=\(failure)")
+                complete(error)
+            default:
+                complete()
+            }
+        } receiveValue: { [weak self] schools in
+            print("\(schools)")
+            self?.schools = schools
+            subject.send(())
         }
         return subject
     }
 }
 
 extension Schools {
-    public func bestGraduationRate() -> [SchoolInfo] {
-        let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [NSSortDescriptor(key: "graduationRate", ascending: false)])
-        return schoolsList
+    public func bestGraduationRate() -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard school1.graduationRate.isEmpty == false else { return false }
+            guard school2.graduationRate.isEmpty == false else { return true }
+            guard let rate1 = Float(school1.graduationRate), let rate2 = Float(school2.graduationRate) else {
+                return false
+            }
+            return rate1 > rate2
+        })
     }
     
-    public func worsttGraduationRate() -> [SchoolInfo] {
-        let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [NSSortDescriptor(key: "graduationRate", ascending: true)])
-        return schoolsList
+    public func worsttGraduationRate() -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard school1.graduationRate.isEmpty == false else { return false }
+            guard school2.graduationRate.isEmpty == false else { return true }
+            guard let rate1 = Float(school1.graduationRate), let rate2 = Float(school2.graduationRate) else {
+                return false
+            }
+            return rate1 < rate2
+        })
     }
     
-    public func mostNumberOfStudents() -> [SchoolInfo] {
-        let sortDescriptor = NSSortDescriptor(key: "totalStudents", ascending: false, selector: #selector(NSString.localizedStandardCompare(_:)))
-        let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [sortDescriptor])
-        return schoolsList
+    public func mostNumberOfStudents() -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard school1.totalStudents.isEmpty == false else { return false }
+            guard school2.totalStudents.isEmpty == false else { return true }
+            guard let num1 = Int(school1.totalStudents), let num2 = Int(school2.totalStudents) else {
+                return false
+            }
+            return num1 > num2
+        })
     }
     
-    public func leastNumberOfStudents() -> [SchoolInfo] {
-        let sortDescriptor = NSSortDescriptor(key: "totalStudents", ascending: true, selector: #selector(NSString.localizedStandardCompare(_:)))
-        let schoolsList: [SchoolInfo] = CDManager.shared.fetch([], sortDescriptors: [sortDescriptor])
-        return schoolsList
+    public func leastNumberOfStudents() -> [School] {
+        return schools.sorted(by: { school1, school2 in
+            guard school1.totalStudents.isEmpty == false else { return false }
+            guard school2.totalStudents.isEmpty == false else { return true }
+            guard let num1 = Int(school1.totalStudents), let num2 = Int(school2.totalStudents) else {
+                return false
+            }
+            return num1 < num2
+        })
     }
 }
 
@@ -142,7 +150,7 @@ extension SchoolDetails: Decodable {
     }
 }
 
-extension SchoolInfo {
+extension School {
     func fetchDetails() -> PassthroughSubject<SchoolDetails?, Error> {
         let subject = PassthroughSubject<SchoolDetails?, Error>()
         var cancellables: [AnyCancellable] = []
@@ -156,7 +164,7 @@ extension SchoolInfo {
             cancellables.removeAll()
         }
         
-        guard let dbn = self.dbn else {
+        guard !self.dbn.isEmpty else {
             subject.send(nil)
             complete()
             return subject

@@ -10,8 +10,6 @@
 		359E206928E8971100984029 /* SchoolsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206828E8971100984029 /* SchoolsListViewController.swift */; };
 		359E206D28E8BD5400984029 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206C28E8BD5400984029 /* Network.swift */; };
 		359E207228E8BDA300984029 /* Schools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206E28E8BDA300984029 /* Schools.swift */; };
-		359E207328E8BDA300984029 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E206F28E8BDA300984029 /* CoreDataManager.swift */; };
-		359E207428E8BDA300984029 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 359E207028E8BDA300984029 /* Model.xcdatamodeld */; };
 		359E207628E8BE4E00984029 /* DecodableDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207528E8BE4E00984029 /* DecodableDefaults.swift */; };
 		359E207928E8C4C200984029 /* StringListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207828E8C4C200984029 /* StringListViewController.swift */; };
 		359E207B28E8F8F600984029 /* SchoolListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 359E207A28E8F8F600984029 /* SchoolListHeaderView.swift */; };
@@ -51,8 +49,6 @@
 		359E206828E8971100984029 /* SchoolsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolsListViewController.swift; sourceTree = "<group>"; };
 		359E206C28E8BD5400984029 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		359E206E28E8BDA300984029 /* Schools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Schools.swift; sourceTree = "<group>"; };
-		359E206F28E8BDA300984029 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		359E207128E8BDA300984029 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		359E207528E8BE4E00984029 /* DecodableDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodableDefaults.swift; sourceTree = "<group>"; };
 		359E207828E8C4C200984029 /* StringListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringListViewController.swift; sourceTree = "<group>"; };
 		359E207A28E8F8F600984029 /* SchoolListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchoolListHeaderView.swift; sourceTree = "<group>"; };
@@ -104,8 +100,6 @@
 			isa = PBXGroup;
 			children = (
 				359E207528E8BE4E00984029 /* DecodableDefaults.swift */,
-				359E206F28E8BDA300984029 /* CoreDataManager.swift */,
-				359E207028E8BDA300984029 /* Model.xcdatamodeld */,
 				359E206E28E8BDA300984029 /* Schools.swift */,
 			);
 			path = Services;
@@ -343,11 +337,9 @@
 				359E208228E9022700984029 /* DispatchQueueExtension.swift in Sources */,
 				359E207628E8BE4E00984029 /* DecodableDefaults.swift in Sources */,
 				359E207B28E8F8F600984029 /* SchoolListHeaderView.swift in Sources */,
-				359E207428E8BDA300984029 /* Model.xcdatamodeld in Sources */,
 				35D7BCE028E733FA001F4A8E /* ViewController.swift in Sources */,
 				359E207D28E8F92500984029 /* MySchoolTableCell.swift in Sources */,
 				35D7BCDC28E733FA001F4A8E /* AppDelegate.swift in Sources */,
-				359E207328E8BDA300984029 /* CoreDataManager.swift in Sources */,
 				35D7BCDE28E733FA001F4A8E /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -690,19 +682,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		359E207028E8BDA300984029 /* Model.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				359E207128E8BDA300984029 /* Model.xcdatamodel */,
-			);
-			currentVersion = 359E207128E8BDA300984029 /* Model.xcdatamodel */;
-			path = Model.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 35D7BCD028E733FA001F4A8E /* Project object */;
 }
