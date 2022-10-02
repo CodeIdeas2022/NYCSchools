@@ -139,23 +139,11 @@ extension SchoolsListViewController: UITableViewDataSource {
 extension SchoolsListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let school = currentSchools[indexPath.row]
-        var cancellable: AnyCancellable?
-        cancellable = school.fetchDetails()
-            .sink { result in
-                cancellable = nil
-            } receiveValue: { [weak self] details in
-                guard let details = details else {
-                    return
-                }
-                print(details)
-                DispatchQueue.executeInMain {
-                    guard let self = self else { return }
-                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-                    let vc = SchoolDetailsViewController(schoolDetails: details)
-                    guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
-                    vc.presentAsPopover(self, sourceView: cell)
-                }
-            }
+        
+        guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        let vc = SchoolDetailsViewController(school: school)
+        vc.presentAsPopover(self, sourceView: cell)
     }
 }
 

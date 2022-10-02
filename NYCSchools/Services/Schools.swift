@@ -12,6 +12,7 @@ import Combine
 public class Schools {
     public static let shared = Schools()
     public private(set) var schools: [School] = []
+    public private(set) var schoolsDetail: [SchoolDetails] = []
     
     private init() {
         
@@ -21,8 +22,50 @@ public class Schools {
         let subject = PassthroughSubject<Void, Error>()
         let url = URL(string: "https://data.cityofnewyork.us/resource/s3k6-pzi2.json")!
         let request: AnyPublisher<[School],Error> = Network.default.fetch(url)
-        var cancellable: AnyCancellable?
+        var cancellable1: AnyCancellable?
+        var cancellable2: AnyCancellable?
 
+        func complete(_ error: Error? = nil) {
+            if let e = error {
+                subject.send(completion: .failure(e))
+            } else {
+                subject.send(completion: .finished)
+            }
+            cancellable1 = nil
+            cancellable2 = nil
+        }
+
+        cancellable1 = request.sink { [weak self] failure in
+            switch failure {
+            case .failure(let error):
+                print("Failed=\(failure)")
+                complete(error)
+            default:
+                cancellable2 = self?.fetchDetails()
+                    .sink(receiveCompletion: { result in
+                        switch result {
+                        case .failure(let error):
+                            complete(error)
+                        case .finished:
+                            complete()
+                        }
+                    }, receiveValue: { [weak self] details in
+                        self?.schoolsDetail = details
+                        subject.send(())
+                    })
+                    
+            }
+        } receiveValue: { [weak self] schools in
+            self?.schools = schools
+            subject.send(())
+        }
+        return subject
+    }
+    
+    public func fetchDetails() -> PassthroughSubject<[SchoolDetails], Error> {
+        let subject = PassthroughSubject<[SchoolDetails], Error>()
+        var cancellable: AnyCancellable?
+        
         func complete(_ error: Error? = nil) {
             if let e = error {
                 subject.send(completion: .failure(e))
@@ -31,20 +74,26 @@ public class Schools {
             }
             cancellable = nil
         }
-
+        
+        let url = URL(string: "https://data.cityofnewyork.us/resource/f9bf-2cp4.json")!
+        let request: AnyPublisher<[SchoolDetails],Error> = Network.default.fetch(url)
+        
         cancellable = request.sink { failure in
             switch failure {
             case .failure(let error):
                 print("Failed=\(failure)")
                 complete(error)
-            default:
-                complete()
+            default: break
             }
-        } receiveValue: { [weak self] schools in
-            self?.schools = schools
-            subject.send(())
+        } receiveValue: { details in
+            subject.send(details)
+            complete()
         }
         return subject
+    }
+    
+    public func detailsForSchool(_ school: School) -> SchoolDetails? {
+        return schoolsDetail.filter({ $0.dbn == school.dbn }).first
     }
 }
 

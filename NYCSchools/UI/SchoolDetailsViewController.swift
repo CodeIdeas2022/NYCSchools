@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class SchoolDetailsViewController: UIViewController {
     lazy var labelTitle: UILabel = {
@@ -40,10 +41,10 @@ class SchoolDetailsViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("IB not supported")
     }
-    let schoolDetails: SchoolDetails
+    let school: School
     
-    init(schoolDetails: SchoolDetails) {
-        self.schoolDetails = schoolDetails
+    init(school: School) {
+        self.school = school
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -62,8 +63,34 @@ class SchoolDetailsViewController: UIViewController {
     }
     
     func setupData() {
-        labelTitle.text = "\(schoolDetails.name)"
-        labelDetails.text = schoolDetails.satTakers + " students took the SAT." + "\n\nThe average score for critical reading is " + schoolDetails.satCriticalReadingAverage + ".\n\nThe average score for math is " + schoolDetails.satMathAverage + ".\n\nThe average score for critical writing is " + schoolDetails.satWritingAverage + "."
+        labelTitle.text = "\(school.name)"
+        labelDetails.text = "Fetching details for school. Please wait.."
+        var cancellable: AnyCancellable?
+        cancellable = school.fetchDetails()
+            .sink { [weak self] result in
+                switch result {
+                case .failure(let error):
+                    self?.displayNoData(error)
+                default: break
+                }
+                cancellable = nil
+            } receiveValue: { [weak self] schoolDetails in
+                guard let self = self else { return }
+                guard let schoolDetails = schoolDetails else {
+                    self.displayNoData(nil)
+                    return
+                }
+                DispatchQueue.executeInMain {
+                    self.labelDetails.text = schoolDetails.satTakers + " students took the SAT." + "\n\nThe average score for critical reading is " + schoolDetails.satCriticalReadingAverage + ".\n\nThe average score for math is " + schoolDetails.satMathAverage + ".\n\nThe average score for critical writing is " + schoolDetails.satWritingAverage + "."
+                }
+            }
+    }
+    
+    func displayNoData(_ error: Error?) {
+        DispatchQueue.executeInMain { [weak self] in
+            self?.labelDetails.textAlignment = .center
+            self?.labelDetails.text = "Details not available for school." + ( error == nil ? "" : "\nError:\(error!.localizedDescription)")
+        }
     }
     
     func setupLayout() {
