@@ -17,4 +17,4 @@ Technologies used
 - iOS Network API's to fetch data school directory and details
 
 Additional possibilities:
-- Instead of a list, teh schools can be put on a map since the directory has school location data(latitude and longitude)
+- Instead of displaying schools as a list, the schools can be put on a map since the directory has school location data(latitude and longitude)
