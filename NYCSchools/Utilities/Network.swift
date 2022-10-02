@@ -10,7 +10,7 @@ import Combine
 
 public class Network {
     public static let `default` = Network()
-    fileprivate let session: URLSession    
+    fileprivate let session: URLSession
     // Singleton
     private  init() {
         let config = URLSessionConfiguration.default
@@ -18,7 +18,7 @@ public class Network {
         config.timeoutIntervalForResource = Constants.networkTimeout
         config.requestCachePolicy = .useProtocolCachePolicy
         config.urlCache = URLCache.shared
-        self.session = URLSession(configuration: config)
+        self.session = URLSession(configuration: config, delegate: NetworkSession.shared, delegateQueue: OperationQueue.main)
         return
         
     }
@@ -48,5 +48,17 @@ fileprivate extension Network {
     struct Constants {
         static let networkTimeout = 300.0
         static let httpSuccessRange = (200..<300)
+    }
+}
+
+class NetworkSession: NSObject,URLSessionTaskDelegate {
+    static let shared = NetworkSession()
+    let sessionStatus = PassthroughSubject<Bool, Error>()
+    func urlSession(_ session: URLSession, taskIsWaitingForConnectivity task: URLSessionTask) {
+        sessionStatus.send(false)
+    }
+    
+    func urlSession(_ session: URLSession, task: URLSessionTask, willBeginDelayedRequest: URLRequest, completionHandler: (URLSession.DelayedRequestDisposition, URLRequest?) -> Void) {
+        sessionStatus.send(true)
     }
 }

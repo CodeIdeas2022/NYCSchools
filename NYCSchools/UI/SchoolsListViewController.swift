@@ -153,7 +153,7 @@ extension SchoolsListViewController: UITableViewDelegate {
         let school = currentSchools[indexPath.row]
         
         guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
-        self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
         let vc = SchoolDetailsViewController(school: school)
         vc.presentAsPopover(self, sourceView: cell)
     }

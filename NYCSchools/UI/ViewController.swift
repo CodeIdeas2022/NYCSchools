@@ -20,6 +20,20 @@ class ViewController: UIViewController {
         super.viewDidAppear(animated)
         guard !isDataLoaded else { return }
         labelStatus.text = "Fetching data about NYC Schools. Please wait..."
+        var cancellable: AnyCancellable?
+        cancellable = NetworkSession.shared.sessionStatus
+            .sink { _ in
+                cancellable = nil
+            } receiveValue: { [weak self] isInternetAvailable in
+                DispatchQueue.executeInMain {
+                    if isInternetAvailable {
+                        self?.labelStatus.text = "Fetching data about NYC Schools.\nPlease wait.."
+                    } else {
+                        self?.labelStatus.text = "Waiting for internet connection..."
+                    }
+                }
+            }
+
         var request: AnyCancellable?
         Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { _ in
             request = Schools.shared.fetch()
@@ -39,9 +53,13 @@ class ViewController: UIViewController {
     
     func presentSchools() {
         func display() {
+            guard let window = UIApplication.shared.keyWindow else { return }
             let vc = SchoolsListViewController()
-            vc.modalPresentationStyle = .fullScreen
-            present(vc, animated: true)
+            window.rootViewController = vc
+//            UIView.transition(from: view, to: vc.view, duration: 0.5, options: .transitionCurlDown) { _ in
+//                window.rootViewController = vc
+//            }
+            
         }
         DispatchQueue.executeInMain {
             display()

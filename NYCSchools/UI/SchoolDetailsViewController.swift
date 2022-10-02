@@ -26,7 +26,7 @@ class SchoolDetailsViewController: UIViewController {
         v.addSubview(labelTitle)
         v.addSubview(closeButton)
 
-        closeButton.rightAnchor.constraint(equalTo: v.safeAreaLayoutGuide.rightAnchor, constant: -5).isActive = true
+        closeButton.rightAnchor.constraint(equalTo: v.safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         closeButton.centerYAnchor.constraint(equalTo: v.safeAreaLayoutGuide.centerYAnchor).isActive = true
         
         labelTitle.topAnchor.constraint(equalTo: v.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
@@ -41,17 +41,18 @@ class SchoolDetailsViewController: UIViewController {
         label.textColor = .black
         label.translatesAutoresizingMaskIntoConstraints = false
         label.dataDetectorTypes = [.phoneNumber, .address, .link]
+        label.font = UIFont.systemFont(ofSize: 15)
         return label
     }()
     
     lazy var closeButton: UIButton = {
        let b = UIButton()
         b.translatesAutoresizingMaskIntoConstraints = false
-        let config = UIImage.SymbolConfiguration(textStyle: .largeTitle)
+        let config = UIImage.SymbolConfiguration(textStyle: .headline)
         let closeImage = UIImage(systemName: "xmark.circle", withConfiguration: config)
         b.setImage(closeImage, for: .normal)
         b.addTarget(self, action: #selector(closeScreen), for: .touchUpInside)
-        b.tintColor = .white
+        b.tintColor = .lightGray
         b.setContentCompressionResistancePriority(.required, for: .horizontal)
         return b
         
