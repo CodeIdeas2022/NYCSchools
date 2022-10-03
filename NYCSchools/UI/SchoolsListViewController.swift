@@ -154,8 +154,11 @@ extension SchoolsListViewController: UITableViewDelegate {
         
         guard let cell = self.tableView.cellForRow(at: indexPath) else { return }
         self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
-        let vc = SchoolDetailsViewController(school: school)
-        vc.presentAsPopover(self, sourceView: cell)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+            guard let self = self else { return }
+            let vc = SchoolDetailsViewController(school: school)
+            vc.presentAsPopover(self, sourceView: cell)
+        }
     }
 }
 
