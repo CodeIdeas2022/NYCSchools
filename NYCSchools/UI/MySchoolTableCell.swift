@@ -40,19 +40,19 @@ class MySchoolCell: UITableViewCell {
             if let ranking = school.details?.satRanking, ranking.reading >= 0 {
                 detail.append("SAT reading rank \(ranking.reading)/\(ranking.totalSchoolsWithReadingScores)")
             } else {
-                detail.append("SSAT reading rank NA")
+                detail.append("SAT reading rank NA")
             }
         case .topSATWriting, .bottomSATWriting:
             if let ranking = school.details?.satRanking, ranking.writing >= 0 {
                 detail.append("SAT writing rank \(ranking.writing)/\(ranking.totalSchoolsWithWritingScores)")
             } else {
-                detail.append("SSAT writing rank NA")
+                detail.append("SAT writing rank NA")
             }
         case .topSATMath, .bottomSATMath:
             if let ranking = school.details?.satRanking, ranking.math >= 0 {
                 detail.append("SAT math rank \(ranking.math)/\(ranking.totalSchoolsWithMathScores)")
             } else {
-                detail.append("SSAT math rank NA")
+                detail.append("SAT math rank NA")
             }
         }
         detail.append(school.borough)

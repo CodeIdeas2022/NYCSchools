@@ -95,8 +95,10 @@ class SchoolDetailsViewController: UIViewController {
                 detailInfo = detailInfo + "\n\nCritical reading rank is \(ranking.reading)/\(ranking.totalSchoolsWithReadingScores)."
                 detailInfo = detailInfo + "\n\nCritical math rank is \(ranking.math)/\(ranking.totalSchoolsWithMathScores)."
                 detailInfo = detailInfo + "\n\nCritical writing rank is \(ranking.writing)/\(ranking.totalSchoolsWithWritingScores)."
-                detailInfo = detailInfo + "\n\nOverview: \(school.overview)"
+            } else {
+                detailInfo = detailInfo + "\n\nSAT rankings not available."
             }
+            detailInfo = detailInfo + "\n\nOverview: \(school.overview)"
             labelDetails.text = detailInfo
         } else {
             displayNoData(nil)

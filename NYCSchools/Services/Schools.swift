@@ -61,8 +61,9 @@ public class Schools {
                                 continue
                             }
                             var details = self.schoolsDetail[detailIndex]
-                            let ranking = self.satRankingForSchool(details)
-                            details.setRanking(ranking)
+                            if let ranking = self.satRankingForSchool(details) {
+                                details.setRanking(ranking)
+                            }
                             self.schoolsDetail[detailIndex] = details
                             
                             school.setSchoolDetails(details)
@@ -116,7 +117,10 @@ public class Schools {
         return schoolsDetail.indices.filter({ schoolsDetails[$0].dbn == school.dbn }).first
     }
     
-    public func satRankingForSchool(_ details: SchoolDetails) -> SATRankings {
+    public func satRankingForSchool(_ details: SchoolDetails) -> SATRankings? {
+        guard Int(details.satTakers) != nil else {
+            return nil
+        }
         let reading = schoolsDetail.sorted { detail1, detail2 in
             return detail1.satCriticalReadingAverage > detail2.satCriticalReadingAverage
         }
