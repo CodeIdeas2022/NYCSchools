@@ -16,6 +16,10 @@ Technologies used
 - UIKit
 - iOS Network API's to fetch schools directory and details
 
+NOTES:
+- During sort, if a school has invalid data associated with the sort criteria, its always pushed to the bottom of the list. 
+- Schools details screen will only display valid SAT data for the school. In case of invalid data, the data will be shown as "not available"
+
 Additional possibilities
 - Instead of displaying schools as a list, the schools can be put on a map since the directory has school location data(latitude and longitude)
 
