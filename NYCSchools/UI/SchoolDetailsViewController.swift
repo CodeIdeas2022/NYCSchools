@@ -85,12 +85,18 @@ class SchoolDetailsViewController: UIViewController {
     func setupData() {
         labelTitle.text = "\(school.name)"
         if let schoolDetails = school.details {
-            let ranking = Schools.shared.satRankingForSchool(schoolDetails)
-            var detailInfo = schoolDetails.satTakers + " students took the SAT." + "\n\nThe average score for critical reading is " + schoolDetails.satCriticalReadingAverage + ".\n\nThe average score for math is " + schoolDetails.satMathAverage + ".\n\nThe average score for critical writing is " + schoolDetails.satWritingAverage + "."
-            detailInfo = detailInfo + "\n\nCritical reading rank is \(ranking.reading)/\(ranking.totalSchoolsWithReadingScores)."
-            detailInfo = detailInfo + "\n\nCritical math rank is \(ranking.math)/\(ranking.totalSchoolsWithMathScores)."
-            detailInfo = detailInfo + "\n\nCritical writing rank is \(ranking.writing)/\(ranking.totalSchoolsWithWritingScores)."
-            detailInfo = detailInfo + "\n\nOverview: \(school.overview)"
+            var detailInfo = ""
+            if Int(schoolDetails.satTakers) != nil {
+                detailInfo = schoolDetails.satTakers + " students took the SAT." + "\n\nThe average score for critical reading is " + schoolDetails.satCriticalReadingAverage + ".\n\nThe average score for math is " + schoolDetails.satMathAverage + ".\n\nThe average score for critical writing is " + schoolDetails.satWritingAverage + "."
+            } else {
+                detailInfo = "SAT averages not available."
+            }
+            if let ranking = schoolDetails.satRanking {
+                detailInfo = detailInfo + "\n\nCritical reading rank is \(ranking.reading)/\(ranking.totalSchoolsWithReadingScores)."
+                detailInfo = detailInfo + "\n\nCritical math rank is \(ranking.math)/\(ranking.totalSchoolsWithMathScores)."
+                detailInfo = detailInfo + "\n\nCritical writing rank is \(ranking.writing)/\(ranking.totalSchoolsWithWritingScores)."
+                detailInfo = detailInfo + "\n\nOverview: \(school.overview)"
+            }
             labelDetails.text = detailInfo
         } else {
             displayNoData(nil)
