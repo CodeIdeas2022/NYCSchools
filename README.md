@@ -18,3 +18,6 @@ Technologies used
 
 Additional possibilities
 - Instead of displaying schools as a list, the schools can be put on a map since the directory has school location data(latitude and longitude)
+
+Wiki with screenshots
+https://github.com/CodeIdeas2022/NYCSchools/wiki/NYC-Schools
