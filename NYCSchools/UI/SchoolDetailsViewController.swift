@@ -124,7 +124,7 @@ class SchoolDetailsViewController: UIViewController {
         if let popover = popoverPresentationController {
             popover.sourceView = sourceView
             popover.sourceRect = sourceView.bounds
-            popover.permittedArrowDirections = [.up]
+            popover.permittedArrowDirections = [.any]
         }
         parent.present(self, animated: true)
     }
