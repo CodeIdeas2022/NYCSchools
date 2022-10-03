@@ -31,6 +31,7 @@ class NYCSchoolsTests: XCTestCase {
                     case .failure(let error):
                         XCTFail("Schools.shared.fetch return error. error=\(error.localizedDescription)")
                     }
+                    expectation.fulfill()
                 } receiveValue: { _ in
                     
                 }
