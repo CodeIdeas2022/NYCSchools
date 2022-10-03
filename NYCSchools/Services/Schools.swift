@@ -134,7 +134,7 @@ public class Schools {
         let readingRank = reading.firstIndex(where: {$0.dbn == details.dbn }) ?? -1
         let writingRank = writing.firstIndex(where: {$0.dbn == details.dbn }) ?? -1
         let mathRank = math.firstIndex(where: {$0.dbn == details.dbn }) ?? -1
-        return SATRankings(reading: readingRank, writing: writingRank, math: mathRank, totalSchoolsWithReadingScores: reading.count, totalSchoolsWithWritingScores: writing.count, totalSchoolsWithMathScores: math.count)
+        return SATRankings(reading: readingRank != -1 ? (readingRank + 1): -1, writing: writingRank != -1 ? (writingRank + 1): -1, math: mathRank != -1 ? (mathRank + 1): -1, totalSchoolsWithReadingScores: reading.count, totalSchoolsWithWritingScores: writing.count, totalSchoolsWithMathScores: math.count)
     }
 }
 
