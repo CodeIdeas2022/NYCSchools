@@ -22,6 +22,8 @@ NOTES:
 
 Additional possibilities
 - Instead of displaying schools as a list, the schools can be put on a map since the directory has school location data(latitude and longitude)
+- Share data through iOS share feature
+- Sort options for search results
 
 Wiki with screenshots
 https://github.com/CodeIdeas2022/NYCSchools/wiki/NYC-Schools
