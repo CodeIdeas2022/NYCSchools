@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import NYCSchools
+import Combine
 
 class NYCSchoolsTests: XCTestCase {
 
@@ -18,18 +19,25 @@ class NYCSchoolsTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
-    }
-
-    func testPerformanceExample() throws {
+    func testFetchPerformance() throws {
         // This is an example of a performance test case.
         self.measure {
-            // Put the code you want to measure the time of here.
+            let expectation = self.expectation(description: "Fetch will return with a result. Performance is measured")
+            var cancellable = Schools.shared.fetch()
+                .sink { result in
+                    switch result {
+                    case .finished:
+                        XCTAssertTrue(true)
+                    case .failure(let error):
+                        XCTFail("Schools.shared.fetch return error. error=\(error.localizedDescription)")
+                    }
+                } receiveValue: { _ in
+                    
+                }
+            waitForExpectations(timeout: 10) { error in
+                guard let e = error else { return }
+                XCTFail("Schools.shared.fetch timedout.error=\(e.localizedDescription)")
+            }
         }
     }
 
