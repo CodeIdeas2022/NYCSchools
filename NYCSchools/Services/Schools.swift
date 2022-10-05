@@ -121,13 +121,16 @@ public class Schools {
         guard Int(details.satTakers) != nil else {
             return nil
         }
-        let reading = schoolsDetail.sorted { detail1, detail2 in
+        let schoolsDetailReading = self.schoolsDetail.filter({ Int($0.satCriticalReadingAverage) != nil })
+        let reading = schoolsDetailReading.sorted { detail1, detail2 in
             return detail1.satCriticalReadingAverage > detail2.satCriticalReadingAverage
         }
-        let writing = schoolsDetail.sorted { detail1, detail2 in
+        let schoolsDetailWriting = self.schoolsDetail.filter({ Int($0.satWritingAverage) != nil })
+        let writing = schoolsDetailWriting.sorted { detail1, detail2 in
             return detail1.satWritingAverage > detail2.satWritingAverage
         }
-        let math = schoolsDetail.sorted { detail1, detail2 in
+        let schoolsDetailMath = self.schoolsDetail.filter({ Int($0.satMathAverage) != nil })
+        let math = schoolsDetailMath.sorted { detail1, detail2 in
             return detail1.satMathAverage > detail2.satMathAverage
         }
         
